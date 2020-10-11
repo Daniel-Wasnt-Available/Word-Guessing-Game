@@ -1,21 +1,33 @@
 #-----------------------------------------------------------------------------
-# Name:        New File Generator (newFile.py)
-# Purpose:     Generates a new file for use in the ICS3U course
+# Name:        Word Guessing Game.py
+# Purpose:     Make a hangman type game
 #
-# Author:      Mr. Brooks
+# Author:      Daniel
 # Created:     07-Oct-2020
-# Updated:     07-Oct-2020
+# Updated:     011-Oct-2020
 #-----------------------------------------------------------------------------
 
-WIDTH = 800
+WIDTH = 800 #these are constant values so we use all ca
 HEIGHT = 600
 import random
 gameState = ''
+run = True
+imageStatus = 0
+letter = ''
+guessedLetter = ['Letters You Have Already Guessed',]
+
 
 #picking a random word from my secret words lists
 wordList = ["laptop", "blizzard" , "galaxy", "matrix" , "sunday", "mystify", "unknown", "yummy", "saturn", "canada", "oakville",
             "hospital", "computer", "firetruck", "github", "binder", "python", "october", "escape", "advanced", "monday", "pygame"]
+
+#this did not work when I put it in a function
+#I searched it up countless times and I was wasting a lot of time
+#so I just left it here, out side of a function
 secretWord = (random.choice(wordList))
+numLettersInWordList = len(secretWord)
+print (secretWord)
+print (numLettersInWordList)
 
 #start button
 button1Draw = [300, 400, 200, 50]
@@ -43,6 +55,25 @@ def startUp():
 
     gameState = 'start screen'
         
+#def secretWord():
+    #global wordList, numLettersInWordList
+    
+
+
+def on_key_down(unicode):
+    global letter, numLettersInWordList, secretWord
+    global guessedLetter
+
+    
+    if gameState == 'game':
+        if unicode in (secretWord):
+            #guessedLetter = (unicode)
+            print("correct!")
+            guessedLetter.append(unicode)
+            print(unicode)
+            print(guessedLetter)
+        else:
+            print("try again")
 
 #buttons
 def on_mouse_up(pos, button):
@@ -102,7 +133,8 @@ def on_key_up(key):
 
 #Draw
 def draw():
-    global gameState
+    global gameState, numLettersInWordList, guessedLetter, unicode
+    
     if gameState == 'start screen':
         '''landing page'''
         if gameState == "start screen": #might change to kep pressed later
@@ -113,7 +145,7 @@ def draw():
             screen.draw.filled_rect(button1Rect, button1Color)
             screen.draw.text("Click To Start", center=(400,425), color="blue", fontsize = 32)
             screen.draw.filled_rect(button3Rect, button3Color)
-            
+            screen.draw.text("Rules", center=(400,480), color=(255,102,102), fontsize = 32)
     
     elif gameState == 'game':
         '''the actual game'''
@@ -121,9 +153,15 @@ def draw():
         screen.fill((173, 230, 187))  
         screen.draw.filled_rect(button2Rect, button2Color)
         screen.draw.text("Exit", center=(720,575), color="Red", fontsize = 32)
-        if gameState == 'game':
-            guess = input("Take a guess: ")[0]
-            print (guess)
+        screen.draw.text(numLettersInWordList*'_ ', (100,300), color="black", fontsize=80)
+        screen.draw.text((guessedLetter), center=(100,100), color="Red", fontsize = 32) #cant add guessedLetter also I'm having trouble
+        #adding the images into my game. The code below is what I tried recently.
+        
+        #images = []
+        #for i in range(5):
+            #image = image.load("witch" + str(i) + ".png")
+            #images.append(image)
+
         
     elif gameState == 'rules':
         '''rules screen'''
@@ -136,6 +174,7 @@ def draw():
         '''check for errors'''
         screen.fill((255, 204, 203))
         screen.draw.text ("Something is wrong", center=(WIDTH/2, HEIGHT/2), color="red") #use 'center=' to center text
+
 
         
 print (secretWord)
