@@ -61,20 +61,38 @@ def startUp():
 
 
 def on_key_down(unicode):
-    global letter, numLettersInWordList, secretWord
-    global guessedLetter
+    global letter, numLettersInWordList, secretWord, guessedLetter
+    '''this function checks the player input (gussed letter)'''
 
     
     if gameState == 'game':
         if unicode in (secretWord):
-            #guessedLetter = (unicode)
-            print("correct!")
-            guessedLetter.append(unicode)
-            print(unicode)
-            print(guessedLetter)
-        else:
-            print("try again")
+            if unicode in (guessedLetter):
+                '''avoid printing the same letter twice on the list'''
+                print("you already guessed that letter")
+                letter = unicode
+            else:
+                ''' check to see if the letter chosen is in the word'''
+                #guessedLetter = (unicode)
+                print("correct!")
+                guessedLetter.append(unicode)
+                print(unicode)
+                print(guessedLetter)
+                letter = unicode
 
+        else:
+            if unicode in (guessedLetter):
+                '''avoid printing the same letter twice on the list'''
+                print("you already guessed that letter")
+                letter = unicode
+            else:
+                '''finally if the letter is not in the word, we tell them to try again and we
+                add the letter to the list aswell to avoid duplications'''
+                print("try again")
+                guessedLetter.append(unicode)
+                letter = unicode
+            
+        
 #buttons
 def on_mouse_up(pos, button):
     '''Pygame Special Event Hook - Runs when the mouse button is released'''
@@ -133,7 +151,7 @@ def on_key_up(key):
 
 #Draw
 def draw():
-    global gameState, numLettersInWordList, guessedLetter, unicode
+    global gameState, numLettersInWordList, guessedLetter, unicode, letter
     
     if gameState == 'start screen':
         '''landing page'''
@@ -154,8 +172,13 @@ def draw():
         screen.draw.filled_rect(button2Rect, button2Color)
         screen.draw.text("Exit", center=(720,575), color="Red", fontsize = 32)
         screen.draw.text(numLettersInWordList*'_ ', (100,300), color="black", fontsize=80)
-        screen.draw.text((guessedLetter), center=(100,100), color="Red", fontsize = 32) #cant add guessedLetter also I'm having trouble
-        #adding the images into my game. The code below is what I tried recently.
+        screen.draw.text((str(guessedLetter)), center=(200,100), color="Red", fontsize = 20)
+        #need help here, I tested most of my code in "testing code for WGG" before adding them here
+        if letter in secretWord:
+            if numLettersInWordList in range(len(secretWord)):
+                print(numLettersInWordList[i])
+            screen.draw.text(letter, (100,305), color = "black", fontsize = 32)
+
         
         #images = []
         #for i in range(5):

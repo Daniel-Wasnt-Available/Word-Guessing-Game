@@ -1,40 +1,19 @@
-WIDTH = 200
-HEIGHT = 200
+word = ["cow","pig","cat"]
+blanks = "_"*len(word)
 
-gameState = ''
+print(word)
+print(blanks)
 
-#Create the actor object
-knight = Actor('knight_m_run_anim_f0')
-#Give the actor a place on the screen to be
-knight.pos = (100, 100)
-#Set the starting image number
-knight.frame = 0
+guess = input("hi: ")
 
-def updateKnight():
-    global knight
-    knight.frame = knight.frame + 1
+for letter in word:
+    print(letter)
     
-    #What do these lines fix?
-    if knight.frame > 3:
-        knight.frame = 0
-        
-    #Assign a new image name based on the updated frame number
-    knight.image = 'knight_m_run_anim_f' + str(knight.frame)
+#for i in range( len(word)):
+#    print(i,word[i], blanks[i])
+userinput = ("type: ")
     
-
-def on_key_up(key):
-    '''Check to see if a key has been released'''
-    global gameState #Make sure you make globals if necessary
-    global knight
-    
-    if key == keys.A:
-        #Call the animation function
-        updateKnight()
-        
-
-def draw():
-    '''Draw loop for all the graphical elements to display'''
-    #Empty the screen for each animation frame
-    screen.fill((255, 255, 255))
-    #Draw the knight
-    knight.draw()
+for n, i in enumerate(word):
+    if i == (userinput):
+        word[n] = (userinput)
+        print(word)
