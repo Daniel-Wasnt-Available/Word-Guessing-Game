@@ -15,7 +15,6 @@ run = True
 imageStatus = 0
 letter = ''
 guessedLetter = ['Letters You Have Already Guessed',]
-failedAttempt = 0
 lives = 5
 
 #colors
@@ -74,34 +73,37 @@ def on_key_down(unicode):
 
     
     if gameState == 'game':
-        if unicode in (secretWord):
-            if unicode in (guessedLetter):
-                '''avoid printing the same letter twice on the list'''
-                print("you already guessed that letter")
-                letter = unicode
-            else:
-                ''' check to see if the letter chosen is in the word'''
-                #guessedLetter = (unicode)
-                print("correct!")
-                guessedLetter.append(unicode)
-                print(unicode)
-                print(guessedLetter)
-                letter = unicode
+        if unicode.isalpha():
+            if unicode in (secretWord):
+                if unicode in (guessedLetter):
+                    '''avoid printing the same letter twice on the list'''
+                    print("you already guessed that letter")
+                    letter = unicode
+                else:
+                    ''' check to see if the letter chosen is in the word'''
+                    #guessedLetter = (unicode)
+                    print("correct!")
+                    guessedLetter.append(unicode)
+                    print(unicode)
+                    print(guessedLetter)
+                    letter = unicode
 
-        else:
-            if unicode in (guessedLetter):
-                '''avoid printing the same letter twice on the list'''
-                print("you already guessed that letter")
-                letter = unicode
             else:
-                '''finally if the letter is not in the word, we tell them to try again and we
-                add the letter to the list aswell to avoid duplications'''
-                print("try again")
-                guessedLetter.append(unicode)
-                letter = unicode
-                lives -= 1
-                if lives == 0:
-                    gameState = 'end'
+                if unicode in (guessedLetter):
+                    '''avoid printing the same letter twice on the list'''
+                    print("You already guessed that letter")
+                    letter = unicode
+                else:
+                    '''finally if the letter is not in the word, we tell them to try again and we
+                    add the letter to the list aswell to avoid duplications'''
+                    print("That letter in not in the word, please try again")
+                    guessedLetter.append(unicode)
+                    letter = unicode
+                    lives -= 1
+                    if lives == 0:
+                        gameState = 'end'
+        else:
+            print("Opps, numbers and symbols are not valid")
             
         
 #buttons
@@ -166,7 +168,7 @@ def draw():
     
     if gameState == 'start screen':
         '''landing page'''
-        if gameState == "start screen": #might change to kep pressed later
+        if gameState == "start screen":
             screen.clear()
             screen.fill((212, 235, 250))
             screen.draw.text("Hello, Welcome To My Program", center=(WIDTH/2, HEIGHT/2), color="hotpink", fontsize=45)
@@ -230,10 +232,9 @@ def draw():
         '''check for errors'''
         screen.fill((255, 204, 203))
         screen.draw.text ("Something is wrong", center=(WIDTH/2, HEIGHT/2), color="red")
-        
 
-
-        
+#need help with making the whole game into a loop        
 print (secretWord)
 
 startUp()
+
