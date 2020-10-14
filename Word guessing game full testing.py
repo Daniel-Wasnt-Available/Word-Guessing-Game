@@ -14,7 +14,7 @@ gameState = ''
 run = True
 imageStatus = 0
 letter = ''
-guessedLetter = ['Letters You Have Already Guessed',]
+guessedLetter = []
 lives = 5
 
 #colors
@@ -188,12 +188,21 @@ def draw():
         screen.draw.text((str(guessedLetter)), center=(200,100), color="Red", fontsize = 20)
         screen.draw.text("Lives left: " + (str(lives)), center=(100,50), color="hotpink", fontsize = 40)
         '''printing correctly gussed letters on screen'''
-        if letter in secretWord:
-            if numLettersInWordList in range(len(secretWord)):
-                print(numLettersInWordList[i])
-            screen.draw.text(letter, (100,305), color = "black", fontsize = 32)
-        elif lives == 0:
-            gameState == 'end'
+        
+        for i in range(len(secretWord)): #cat -> [0,1,2]
+            if secretWord[i] in guessedLetter:
+                #print the letter
+                screen.draw.text(secretWord[i] , (100,305), color = "black", fontsize = 32)
+            else:
+                screen.draw.text(" ", (100,305), color = "black", fontsize = 32) 
+            
+        
+#        if letter in secretWord:
+#            if numLettersInWordList in range(len(secretWord)):
+#               print(numLettersInWordList[i])
+#            screen.draw.text(letter, (100,305), color = "black", fontsize = 32)
+#        elif lives == 0:
+#            gameState == 'end'
 
         
         #images = []

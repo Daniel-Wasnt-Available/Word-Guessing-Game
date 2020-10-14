@@ -4,7 +4,7 @@
 #
 # Author:      Daniel
 # Created:     07-Oct-2020
-# Updated:     012-Oct-2020
+# Updated:     14-Oct-2020
 #-----------------------------------------------------------------------------
 
 WIDTH = 800 #these are constant values so we use all ca
@@ -14,9 +14,9 @@ gameState = ''
 run = True
 imageStatus = 0
 letter = ''
-guessedLetter = ['Letters You Have Already Guessed',]
-failedAttempt = 0
+guessedLetter = []
 lives = 5
+xDisplayWord = 80
 
 #colors
 yellow = (246,255,59)
@@ -74,34 +74,39 @@ def on_key_down(unicode):
 
     
     if gameState == 'game':
-        if unicode in (secretWord):
-            if unicode in (guessedLetter):
-                '''avoid printing the same letter twice on the list'''
-                print("you already guessed that letter")
-                letter = unicode
-            else:
-                ''' check to see if the letter chosen is in the word'''
-                #guessedLetter = (unicode)
-                print("correct!")
-                guessedLetter.append(unicode)
-                print(unicode)
-                print(guessedLetter)
-                letter = unicode
+        if unicode.isalpha():
+            if unicode in (secretWord):
+                if unicode in (guessedLetter):
+                    '''avoid printing the same letter twice on the list'''
+                    print("you already guessed that letter")
+                    letter = unicode
+                else:
+                    ''' check to see if the letter chosen is in the word'''
+                    #guessedLetter = (unicode)
+                    print("correct!")
+                    guessedLetter.append(unicode)
+                    print(unicode)
+                    print(guessedLetter)
+                    letter = unicode
 
-        else:
-            if unicode in (guessedLetter):
-                '''avoid printing the same letter twice on the list'''
-                print("you already guessed that letter")
-                letter = unicode
+
             else:
-                '''finally if the letter is not in the word, we tell them to try again and we
-                add the letter to the list aswell to avoid duplications'''
-                print("try again")
-                guessedLetter.append(unicode)
-                letter = unicode
-                lives -= 1
-                if lives == 0:
-                    gameState = 'end'
+                if unicode in (guessedLetter):
+                    '''avoid printing the same letter twice on the list'''
+                    print("You already guessed that letter")
+                    letter = unicode
+                else:
+                    '''finally if the letter is not in the word, we tell them to try again and we
+                    add the letter to the list aswell to avoid duplications'''
+                    print("That letter in not in the word, please try again")
+                    guessedLetter.append(unicode)
+                    letter = unicode
+                    lives -= 1
+                    if lives == 0:
+                        gameState = 'end'
+                        
+        else:
+            print("Opps, numbers and symbols are not valid")
             
         
 #buttons
@@ -154,19 +159,15 @@ def on_mouse_up(pos, button):
             button3Value = True
             gameState = 'rules'
 
-def on_key_up(key):
-    '''used key up to see if it gets released intead of pressed or held down'''
-    global gameState
-    
-    
+
 
 #Draw
 def draw():
-    global gameState, numLettersInWordList, guessedLetter, unicode, letter, yellow, lives
+    global gameState, numLettersInWordList, guessedLetter, unicode, letter, yellow, lives, xDisplayWord
     
     if gameState == 'start screen':
         '''landing page'''
-        if gameState == "start screen": #might change to kep pressed later
+        if gameState == "start screen":
             screen.clear()
             screen.fill((212, 235, 250))
             screen.draw.text("Hello, Welcome To My Program", center=(WIDTH/2, HEIGHT/2), color="hotpink", fontsize=45)
@@ -176,22 +177,37 @@ def draw():
             screen.draw.filled_rect(button3Rect, button3Color)
             screen.draw.text("Rules", center=(400,480), color=(255,102,102), fontsize = 32)
     
+    
     elif gameState == 'game':
+        letterDisplay = " "
         '''the actual game'''
         screen.clear()
         screen.fill((173, 230, 187))  
         screen.draw.filled_rect(button2Rect, button2Color)
         screen.draw.text("Exit", center=(720,575), color="Red", fontsize = 32)
-        screen.draw.text(numLettersInWordList*'_ ', (100,300), color="black", fontsize=80)
+        screen.draw.text(numLettersInWordList*'_  ', (100,300), color="black", fontsize=80)
         screen.draw.text((str(guessedLetter)), center=(200,100), color="Red", fontsize = 20)
         screen.draw.text("Lives left: " + (str(lives)), center=(100,50), color="hotpink", fontsize = 40)
-        #need help here, I tested most of my code in "testing code for WGG" before adding them here
-        if letter in secretWord:
-            if numLettersInWordList in range(len(secretWord)):
-                print(numLettersInWordList[i])
-            screen.draw.text(letter, (100,305), color = "black", fontsize = 32)
-        elif lives == 0:
-            gameState == 'end'
+        '''printing correctly gussed letters on screen'''
+        
+        for i in range(len(secretWord)):
+            '''displaying correctly guessed letters on screen'''
+            if secretWord[i] in guessedLetter:
+                #print the letter
+                letterDisplay += secretWord[i] + "  "
+                screen.draw.text(letterDisplay , (xDisplayWord,290), color = "black", fontsize = 80)
+                if letterDisplay == secretWord:
+                    screen.draw.text(" You Won!", (400,300), color = "black", fontsize = 80) 
+            else:
+                screen.draw.text(" ", (100,305), color = "black", fontsize = 32) 
+            
+        
+#        if letter in secretWord:
+#            if numLettersInWordList in range(len(secretWord)):
+#               print(numLettersInWordList[i])
+#            screen.draw.text(letter, (100,305), color = "black", fontsize = 32)
+#        elif lives == 0:
+#            gameState == 'end'
 
         
         #images = []
@@ -201,6 +217,7 @@ def draw():
 
         
     elif gameState == 'end':
+        '''take users to this screen if they lost'''
         screen.clear()
         screen.fill((173, 230, 187))
         screen.draw.filled_rect(button2Rect, button2Color)
@@ -209,7 +226,16 @@ def draw():
         screen.draw.text("Looks Like You've Run Out Of Lives", center=(400,170), color="orange", fontsize = 60)
         screen.draw.text("Click the exit button to restart", center=(400,250), color=(yellow), fontsize = 70)
         
-        
+    elif gameState == 'win':
+        '''take user to this screen if they win'''
+        screen.clear()
+        screen.fill(lightgreen)
+        screen.draw.filled_rect(button2Rect, button2Color)
+        screen.draw.text("Exit", center=(720,575), color="Red", fontsize = 32)
+        screen.draw.text("Oh No!", center=(400,100), color="red", fontsize = 100)
+        screen.draw.text("Looks Like You've Run Out Of Lives", center=(400,170), color="orange", fontsize = 60)
+        screen.draw.text("Click the exit button to restart", center=(400,250), color=(yellow), fontsize = 70)
+
     elif gameState == 'rules':
         '''rules screen'''
         screen.clear()
@@ -230,10 +256,8 @@ def draw():
         '''check for errors'''
         screen.fill((255, 204, 203))
         screen.draw.text ("Something is wrong", center=(WIDTH/2, HEIGHT/2), color="red")
-        
 
-
-        
+#need help with making the whole game into a loop        
 print (secretWord)
 
 startUp()
