@@ -187,7 +187,7 @@ def draw():
         screen.draw.text(numLettersInWordList*'_ ', (100,300), color="black", fontsize=80)
         screen.draw.text((str(guessedLetter)), center=(200,100), color="Red", fontsize = 20)
         screen.draw.text("Lives left: " + (str(lives)), center=(100,50), color="hotpink", fontsize = 40)
-        #need help here, I tested most of my code in "testing code for WGG" before adding them here
+        '''printing correctly gussed letters on screen'''
         if letter in secretWord:
             if numLettersInWordList in range(len(secretWord)):
                 print(numLettersInWordList[i])
