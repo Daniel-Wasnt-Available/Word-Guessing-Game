@@ -6,6 +6,17 @@
 # Created:     07-Oct-2020
 # Updated:     14-Oct-2020
 #-----------------------------------------------------------------------------
+# I think this project deserves a 4 because...
+#
+#Features Added:
+#Added a twist to the triditional hangman, when the user guesses a correct letter they gain back a life and the
+#hang man animation will lose a body part. (while I'm writting this I realized gaining body parts for losing makes no sense
+#I'm going to change it so they lost a body part if they guess wrong and gain back one if they are correct...makes more sense.
+#Played around with unicode so I didn't need to type out every letter.
+#Added an AI for the user to compete with (if these brackets are here I may have forgot to edit this and I have not
+# been able to add an AI -> if the case ignore this feature)
+#
+#
 
 WIDTH = 800 #these are constant values so we use all ca
 HEIGHT = 600
@@ -15,7 +26,7 @@ run = True
 imageStatus = 0
 letter = ''
 guessedLetter = []
-lives = 5
+lives = 7
 xDisplayWord = 80
 
 #colors
@@ -36,6 +47,12 @@ secretWord = (random.choice(wordList))
 numLettersInWordList = len(secretWord)
 print (secretWord)
 print (numLettersInWordList)
+
+hangman = Actor("hangman0")
+hangman.pos = (600,150)
+hangman.frame = 0
+
+
 
 #start button
 button1Draw = [300, 400, 200, 50]
@@ -66,10 +83,20 @@ def startUp():
 #def secretWord():
     #global wordList, numLettersInWordList
     
+    
+def updateHangman():
+    '''updates the hangman image'''
+    global hangman
+    
+    
+    if hangman.frame > 6:
+        hangman.frame = 0
+        
+    hangman.image = 'hangman' + str(hangman.frame)
 
 
 def on_key_down(unicode):
-    global letter, numLettersInWordList, secretWord, guessedLetter, lives, gameState
+    global letter, numLettersInWordList, secretWord, guessedLetter, lives, gameState, hangman
     '''this function checks the player input (gussed letter)'''
 
     
@@ -78,8 +105,9 @@ def on_key_down(unicode):
             if unicode in (secretWord):
                 if unicode in (guessedLetter):
                     '''avoid printing the same letter twice on the list'''
-                    print("you already guessed that letter")
+                    print("You already guessed that letter")
                     letter = unicode
+                    
                 else:
                     ''' check to see if the letter chosen is in the word'''
                     #guessedLetter = (unicode)
@@ -88,6 +116,12 @@ def on_key_down(unicode):
                     print(unicode)
                     print(guessedLetter)
                     letter = unicode
+                    
+                    '''gives an extra life for correct guesses, but they can't have more than 7 lives '''
+                    if lives < 7:
+                        lives += 1
+                        hangman.frame -= 1
+                        updateHangman()
 
 
             else:
@@ -102,6 +136,8 @@ def on_key_down(unicode):
                     guessedLetter.append(unicode)
                     letter = unicode
                     lives -= 1
+                    hangman.frame += 1
+                    updateHangman()
                     if lives == 0:
                         gameState = 'end'
                         
@@ -182,7 +218,8 @@ def draw():
         letterDisplay = " "
         '''the actual game'''
         screen.clear()
-        screen.fill((173, 230, 187))  
+        screen.fill((173, 230, 187))
+        hangman.draw()
         screen.draw.filled_rect(button2Rect, button2Color)
         screen.draw.text("Exit", center=(720,575), color="Red", fontsize = 32)
         screen.draw.text(numLettersInWordList*'_  ', (100,300), color="black", fontsize=80)
