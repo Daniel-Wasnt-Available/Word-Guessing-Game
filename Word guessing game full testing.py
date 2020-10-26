@@ -63,6 +63,12 @@ wordList = ["laptop", "blizzard" , "galaxy", "matrix" , "sunday", "mystify", "un
 #I searched it up countless times and I was wasting a lot of time
 #so I just left it here, out side of a function
 secretWord = (random.choice(wordList))
+
+# def pickWord(wordListIn):
+#     return (random.choice(wordListIn))
+# 
+# secretWord = pickWord(wordList)
+
 numLettersInWordList = len(secretWord)
 print (secretWord)
 print (numLettersInWordList)
@@ -249,19 +255,16 @@ def on_mouse_up(pos, button):
         if button1Rect.collidepoint(pos):
             '''Start game button and rules button. turns out I can't have two gameState == 'startScreen's in one
             function so I put the both together here'''
+            gameState = 'game'
+            button1Value = True
+            music.play_once('buttonclicked')
 
             #start screen button
             if  button1Value == True:
                 button1Color = 'light green'
-                button1Value = False
-                gameState = 'game'
-                music.play_once('buttonclicked')
-                
             else:
                 button1Color == 'green'
-                button1Value = True
-                gameState = 'game'
-                music.play_once('buttonclicked')
+                
                 
         #rules button
         elif button3Rect.collidepoint(pos):
@@ -279,7 +282,7 @@ def on_mouse_up(pos, button):
     elif gameState == 'game' or gameState == 'rules':
           if button2Rect.collidepoint(pos):
             '''Exit game button'''
-        
+            
             if  button2Value == True:
                 button2Color = (230,187,173)
                 button2Value = False
@@ -362,6 +365,7 @@ def on_mouse_up(pos, button):
 
 #Draw
 def draw():
+    '''Insert a header'''
     global gameState, numLettersInWordList, guessedLetter, unicode, letter, yellow, lives, plant, endScreen
     global startScreen, rule, winScreen, secretWord
     
@@ -446,3 +450,12 @@ def draw():
 print (secretWord)
 
 startUp()
+
+'''Graded
+
+I screwed up the video, so this is audio only...sorry.  Seems video editing/producing issues are contagious! 
+Please look at the commit diff to see where I changed your program
+https://drive.google.com/file/d/1J10OkRB3yrNXBLa5KFcizIQp18_D9qcV/view?usp=sharing
+
+KA- 9.8/10
+TC - 7/10
